@@ -52,3 +52,21 @@ pip install opencv-python
 * Annotation Adjustment: Bounding boxes are adjusted by subtracting the crop offset. Polygon segmentations are adjusted by subtracting the offset from the Y-coordinates of the vertices, discarding polygons that fall entirely outside the new image bounds. RLE segmentation masks are currently not adjusted.
 * Dataset Format: The output follows the standard COCO dataset format for instance segmentation/detection.
 
+* Images (val2017.zip): This  contains 5,000 images. These are the actual pictures on which the computer vision model will identify and segment objects.
+
+* Annotations (annotations_trainval2017.zip): This zip file contains the ground truth data for the images. The script uses the instances_val2017.json file from this archive. This JSON file includes:
+
+* Bounding boxes: The coordinates for a box drawn around each object in an image.
+
+* Segmentation masks: A pixel-by-pixel outline of each object, allowing for more precise shape identification.
+
+* Category labels: Each object is assigned a category from a list of 80 "thing" categories (like "person," "car," or "dog") and 91 "stuff" categories (amorphous things like "sky" or "grass").
+
+## How the Script Uses the Dataset
+* Downloads Data: The first part of the script uses wget to download both the image zip file (val2017.zip) and the annotation zip file (annotations_trainval2017.zip) directly from the COCO dataset's web servers.
+
+* Identifies the Sky: It processes these images and uses a panoptic segmentation model to specifically find the "sky" category.
+
+* Creates a New, Cropped Dataset: After removing the sky, it generates a new set of images (cropped_val2017) and a new annotation file (instances_val2017_cropped.json) with adjusted coordinates for the bounding boxes and segmentation masks to match the smaller, cropped images.
+
+* The script takes a standard, well-known computer vision dataset and modifies it by removing the sky to create a new, derivative dataset for potentially more focused model training.
